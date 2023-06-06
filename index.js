@@ -1,19 +1,44 @@
-// Importar los módulos necesarios
 const express = require("express");
-
-// Configurar la aplicación Express
+const PORT = process.env.PORT || 3000;
 const app = express();
 app.set("view engine", "ejs");
 
-// Definir las rutas
+// Rutas
 app.get("/", (req, res) => {
-  const data = {
+  const msj = {
     title: "DESPLIEGUE",
     message: "Aplicacion con renderizado!",
   };
-  res.render("index", { data });
+  res.render("index", { msj });
 });
-// Middleware 
+
+app.get("/integrantes", (req, res) => {
+  res.json([
+    {
+      nombre: "Erick",
+      apellido: "Santillan",
+      edad: 21,
+    },
+    {
+      nombre: "Gustavo",
+      apellido: "Uchuari",
+      edad: 24,
+    },
+    {
+      nombre: "Elian",
+      apellido: "Moreira",
+      edad: 20,
+    },
+  ]);
+});
+//imagen
+app.get('/venta',(req,res)=>{
+    res.sendFile('./casa.jpg',{
+        root:__dirname
+    })
+})
+
+// Middleware
 const logica = (req, res, next) => {
   console.log("Hola ");
   req.customData = "Se ah accedido a la ruta autor";
@@ -22,14 +47,12 @@ const logica = (req, res, next) => {
 
 // Uso el middleware
 app.use(logica);
-
 app.get("/autor", (req, res) => {
   console.log(req.customData);
-  // Respuesta
+
   res.send("Hola estas en la ruta autor");
 });
 
-
-app.listen(3000, () => {
-  console.log("Ok en el puerto 3000");
+app.listen(PORT, () => {
+  console.log(`server started on port ${PORT}`);
 });
